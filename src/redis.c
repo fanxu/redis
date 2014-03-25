@@ -50,6 +50,7 @@
 #include <sys/resource.h>
 #include <sys/utsname.h>
 #include <locale.h>
+#include <sys/prctl.h>
 
 /* Our shared "common" objects */
 
@@ -3214,6 +3215,9 @@ void redisSetProcTitle(char *title) {
 
 int main(int argc, char **argv) {
     struct timeval tv;
+
+    // ensure exit after parent process die
+    prctl(PR_SET_PDEATHSIG, SIGTERM);
 
     /* We need to initialize our libraries, and the server configuration. */
 #ifdef INIT_SETPROCTITLE_REPLACEMENT
